@@ -1,0 +1,16 @@
+Thu Sep 24 23:11:47 MSK 2015 : Сетевой сервер Apache Derby Network Server - 10.8.3.2 - (1557835) запущен и готов принимать соединения на порту 1527 на {3} 
+----------------------------------------------------------------
+Thu Sep 24 23:11:48 MSK 2015:
+ Производится загрузка Derby версии The Apache Software Foundation - Apache Derby - 10.8.3.2 - (1557835): экземпляр a816c00e-0150-00fb-ad04-000013d47a65
+в каталоге базы данных D:\Оксана\Магистратура\3 семестр\New Folder\Animator\DB\User  sun.misc.Launcher$AppClassLoader@927e4be 
+
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_75-b13
+user.dir=C:\Program Files\Java\jdk1.7.0_75\db
+os.name=Windows 7
+os.arch=amd64
+os.version=6.1
+derby.system.home=D:\Оксана\Магистратура\3 семестр\New Folder\Animator\DB
+Запущен загрузчик классов базы данных - derby.database.classpath=''
+----------------------------------------------------------------
+Fri Sep 25 01:29:20 MSK 2015: Shutting down Derby engine
