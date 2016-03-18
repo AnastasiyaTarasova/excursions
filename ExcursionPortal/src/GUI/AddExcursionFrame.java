@@ -16,6 +16,7 @@ import logic.User;
  * @author Анастасия
  */
 public class AddExcursionFrame extends javax.swing.JFrame {
+    
     ArrayList<User> excursions;
     User user, user2;
     public Excursion excursion = new Excursion();

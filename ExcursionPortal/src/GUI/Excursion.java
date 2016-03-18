@@ -370,7 +370,7 @@ public class Excursion extends javax.swing.JFrame {
     private void buttonOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonOrderMouseClicked
         try {
             AddOrderFrame order = null;
-            order = new AddOrderFrame();
+            order = new AddOrderFrame(user);
             order.setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(Excursion.class.getName()).log(Level.SEVERE, null, ex);

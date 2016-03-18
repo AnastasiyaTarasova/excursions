@@ -14,14 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import logic.Guide;
 import logic.Order;
 import logic.User;
+import logic.Client;
 
 /**
  *
  * @author Анастасия
  */
-public class AddOrderFrame extends javax.swing.JFrame {
+public class AddOrderFrame  extends javax.swing.JFrame {
     ArrayList<User> excursions;
     ArrayList<User> client;
     public Excursion excursion = new Excursion();
@@ -30,7 +32,7 @@ public class AddOrderFrame extends javax.swing.JFrame {
     List<User> users;
     List<User> users_;
     String[] statusZ = {"На рассмотрении", "Одобрена", "Проведена", "Отказано"};
-    
+    static User user;
     SimpleDateFormat formDate = new SimpleDateFormat("yyyy-MM-dd");
     SimpleDateFormat formTime = new SimpleDateFormat("HH:mm");
     
@@ -54,7 +56,7 @@ public class AddOrderFrame extends javax.swing.JFrame {
         }
     }
 
-    public AddOrderFrame() throws SQLException {
+    public AddOrderFrame(User user) throws SQLException {
         super("Новый заказ"); 
         initComponents();
         buttonOk.setText("Отправить заказ");
@@ -64,9 +66,23 @@ public class AddOrderFrame extends javax.swing.JFrame {
         this.getCBListClient();
     }
     
-    public AddOrderFrame(Order excursion) throws SQLException {
+    public AddOrderFrame(Order excursion, User user) throws SQLException {
+        
+             
         super("Edit Order"); 
         initComponents();
+        
+       /* if (user instanceof Client) {
+            cbStatus.setEnabled(false);
+        }
+        else if(user instanceof Guide){
+            editAdress.setEnabled(false);
+            editDate.setEnabled(false);
+            editTime.setEnabled(false);
+            editMinut.setEnabled(false);
+            editSumma.setEnabled(false);
+        } */
+        
         this.order2 = order;
         jLabel1.setVisible(true);
         editId.setEnabled(false);
@@ -82,6 +98,8 @@ public class AddOrderFrame extends javax.swing.JFrame {
         editMinut.setText(Integer.toString(excursion.getMinut()));
         editSumma.setText(Integer.toString(excursion.getSum()));
         buttonOk.setText("Save");
+        
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -456,7 +474,7 @@ public class AddOrderFrame extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    new AddOrderFrame().setVisible(true);
+                    new AddOrderFrame(user).setVisible(true);
                 } catch (SQLException ex) {
                     Logger.getLogger(AddOrderFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }

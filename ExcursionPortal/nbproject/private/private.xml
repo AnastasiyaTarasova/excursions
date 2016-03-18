@@ -3,26 +3,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/GUI/AddExcursionFrame.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/logic/Personage.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/GUI/Personage.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/GUI/AddGuideFrame.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/db/GuideMapper.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/logic/ExcursionTransaction.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/GUI/ExcursionsTableModel.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/db/UserMapper.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/db/UserTypesEnum.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/animator/ExcursionPortal.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/GUI/RegisterFrame.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/GUI/GuideTableModel.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/logic/UserTransaction.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/Service/Service.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/db/ExcursionMapper.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/logic/Excursion.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/db/ConnectionManager.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/GUI/ExcursionsFrame.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/GUI/LoginFrame.java</file>
-            <file>file:/C:/Users/на/Desktop/animators-master/ExcursionPortal/src/logic/User.java</file>
+            <file>file:/D:/dev/excursions/ExcursionPortal/src/db/OrderMapper.java</file>
+            <file>file:/D:/dev/excursions/ExcursionPortal/src/GUI/Excursion.java</file>
+            <file>file:/D:/dev/excursions/ExcursionPortal/src/GUI/OrdersFrame.java</file>
+            <file>file:/D:/dev/excursions/ExcursionPortal/src/logic/Client.java</file>
+            <file>file:/D:/dev/excursions/ExcursionPortal/src/logic/UserTransaction.java</file>
+            <file>file:/D:/dev/excursions/ExcursionPortal/src/GUI/AddExcursionFrame.java</file>
+            <file>file:/D:/dev/excursions/ExcursionPortal/src/GUI/AddOrderFrame.java</file>
+            <file>file:/D:/dev/excursions/ExcursionPortal/src/logic/User.java</file>
+            <file>file:/D:/dev/excursions/ExcursionPortal/src/logic/OrderTransaction.java</file>
+            <file>file:/D:/dev/excursions/ExcursionPortal/src/GUI/ExcursionTableModel.java</file>
+            <file>file:/D:/dev/excursions/ExcursionPortal/nbproject/build-impl.xml</file>
+            <file>file:/D:/dev/excursions/ExcursionPortal/src/logic/Guide.java</file>
+            <file>file:/D:/dev/excursions/ExcursionPortal/src/logic/Admin.java</file>
+            <file>file:/D:/dev/excursions/ExcursionPortal/src/logic/Order.java</file>
+            <file>file:/D:/dev/excursions/ExcursionPortal/src/db/UserMapper.java</file>
         </group>
     </open-files>
 </project-private>
