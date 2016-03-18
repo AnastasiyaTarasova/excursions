@@ -26,7 +26,6 @@ public class OrdersFrame extends javax.swing.JFrame {
     Order order;
     ArrayList<Order> orders;
     Order order2;
-    User user_;
    
     public void getAllOrders(boolean bool) throws SQLException{
         this.order = order;                                      
@@ -279,7 +278,7 @@ public class OrdersFrame extends javax.swing.JFrame {
     private void btnNewOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNewOrderMouseClicked
         AddOrderFrame addOrder = null;
         try {
-            addOrder = new AddOrderFrame(user_);
+            addOrder = new AddOrderFrame();
         } catch (SQLException ex) {
             Logger.getLogger(OrdersFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -293,7 +292,7 @@ public class OrdersFrame extends javax.swing.JFrame {
             long id = Long.parseLong((String)jTable1.getValueAt(rowIndex,0));
             order2 = Service.findOrder(id);
             AddOrderFrame addOrder = null;
-            addOrder = new AddOrderFrame(order, user_);
+            addOrder = new AddOrderFrame(order2);
             addOrder.setTitle("Edit Order");
             addOrder.setVisible(true);
         } catch (SQLException ex) {
