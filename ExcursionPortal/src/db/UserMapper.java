@@ -182,7 +182,7 @@ public class UserMapper extends AbstractMapper<User>{
     }
 
     @Override
-    public void delete(User user) throws SQLException {
+    public void delete(User user) /*throws SQLException*/ {
 	delete(user.getId());
     }
     

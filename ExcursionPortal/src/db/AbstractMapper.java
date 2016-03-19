@@ -25,7 +25,7 @@ public abstract class AbstractMapper<T> {
     //public abstract T find(long id) throws SQLException;
     protected abstract List<T> getElementsFromResultSet(ResultSet rset) throws SQLException;
     
-    protected Connection getConnection() throws SQLException {
+    protected Connection getConnection() /*throws SQLException*/ {
 	return new ConnectionManager().getConnection();
     }
 }

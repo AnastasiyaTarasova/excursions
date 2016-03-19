@@ -6,6 +6,7 @@
 package GUI;
 
 import Service.Service;
+import java.awt.Color;
 import java.util.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -14,8 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import logic.Client;
+import logic.CurrentUser;
 import logic.Order;
 import logic.User;
+import logic.Guide;
 
 /**
  *
@@ -42,17 +48,18 @@ public class AddOrderFrame extends javax.swing.JFrame {
                 cbExcursion.addItem(excursions.get(i).getNameOfExcursion());
             }
     }
+  
     //Запонение выпадающего списка Client
-    public void getCBListClient() throws SQLException{
+    /*public void getCBListClient() throws SQLException{
         client =  (ArrayList<User>) Service.getAll(1);
         if (client.size()!= 0)
         {
             int customer_size = client.size();
             for(int i=0; i < client.size();i++){
-                cbClient.addItem(client.get(customer_size - i - 1).getLastName());
+                //cbClient.addItem(client.get(customer_size - i - 1).getLastName());
             }
         }
-    }
+    }*/
 
     public AddOrderFrame() throws SQLException {
         super("Новый заказ"); 
@@ -61,7 +68,17 @@ public class AddOrderFrame extends javax.swing.JFrame {
         jLabel1.setVisible(false);
         editId.setVisible(false);
         this.getCBListExcursion();
-        this.getCBListClient();
+        //this.getCBListClient();
+        /*cbClient.setSelectedItem(CurrentUser.getUser().getLastName());
+        cbClient.setEnabled(false);*/
+        lastname.setText(CurrentUser.getUser().getLastName());
+        lastname.setEnabled(false);
+        cbStatus.removeAllItems();
+        /*for(int i=0; i < statusZ.length;i++){
+            cbStatus.addItem(statusZ[i]);
+        }*/
+        cbStatus.addItem("На рассмотрении");
+        cbStatus.setSelectedIndex(0);
     }
     
     public AddOrderFrame(Order excursion) throws SQLException {
@@ -71,7 +88,10 @@ public class AddOrderFrame extends javax.swing.JFrame {
         jLabel1.setVisible(true);
         editId.setEnabled(false);
         editId.setText(Long.toString(excursion.getId()));
-        cbClient.addItem(excursion.getClient().getLastName());
+        lastname.setText(excursion.getClient().getLastName());
+        lastname.setDisabledTextColor(Color.BLACK);
+        lastname.setEnabled(false);
+        //cbClient.addItem(excursion.getClient().getLastName());
         cbExcursion.addItem(excursion.getExcursion().getNameOfExcursion());
         cbStatus.addItem(excursion.getStatus());
         //cbClient.setSelectedItem((User.findLastNameClient(excursion.getClient().getLastName())).toString());
@@ -81,7 +101,59 @@ public class AddOrderFrame extends javax.swing.JFrame {
         editTime.setText(formTime.format(excursion.getTime()));
         editMinut.setText(Integer.toString(excursion.getMinut()));
         editSumma.setText(Integer.toString(excursion.getSum()));
+        User cur = CurrentUser.getUser();
+        if(cur instanceof Guide){
+            editSumma.setDisabledTextColor(Color.BLACK);
+            editSumma.setEnabled(false);
+            editMinut.setDisabledTextColor(Color.BLACK);
+            editMinut.setEnabled(false);
+            editTime.setDisabledTextColor(Color.BLACK);
+            editTime.setEnabled(false);
+            editDate.setDisabledTextColor(Color.BLACK);
+            editDate.setEnabled(false);
+            editAdress.setDisabledTextColor(Color.BLACK);
+            editAdress.setEnabled(false);
+            
+            
+            
+            /*cbExcursion.setBackground(Color.WHITE);
+            ((JTextField) cbExcursion.getEditor().getEditorComponent()).setDisabledTextColor(Color.BLACK);
+            JComboBox cmb = new JComboBox("first", "second");
+            ComboBoxRenderer renderer = new ComboBoxRenderer(cbExcursion);
+            renderer.setColors("black", "black");
+            renderer.setStrings("first", "second");
+            cmb.setRenderer(renderer);*/
+            cbExcursion.setEditable(true);
+            ((JTextField)cbExcursion.getEditor().getEditorComponent()).setDisabledTextColor(Color.black);
+            cbExcursion.setEnabled(false);
+            
+            //cbClient.setEnabled(false);
+            
+            
+            cbStatus.removeAllItems();
+            if(excursion.getStatus().equals("На рассмотрении")){
+                cbStatus.addItem("Одобрена");
+                cbStatus.addItem("Отказано");
+            }
+            else if(excursion.getStatus().equals("Одобрена")){
+                cbStatus.addItem("Проведена");
+            }
+            else{
+                cbStatus.addItem("Одобрена");
+                /*cbStatus.addItem("Отказано");
+                cbStatus.addItem("Проведена");*/
+            }
+            /*cbStatus.addItem("Одобрена");
+            cbStatus.addItem("Проведена");
+            cbStatus.addItem("Отказано");*/
+        }
+        if(cur instanceof Client){
+            cbStatus.removeAllItems();
+            cbStatus.addItem("На рассмотрении");
+        }
         buttonOk.setText("Save");
+
+        cbStatus.setSelectedIndex(0);
     }
 
     @SuppressWarnings("unchecked")
@@ -104,10 +176,10 @@ public class AddOrderFrame extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         buttonOk = new javax.swing.JButton();
         cbStatus = new javax.swing.JComboBox();
-        cbClient = new javax.swing.JComboBox();
         cbExcursion = new javax.swing.JComboBox();
         editDate = new javax.swing.JFormattedTextField();
         editTime = new javax.swing.JFormattedTextField();
+        lastname = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -186,28 +258,6 @@ public class AddOrderFrame extends javax.swing.JFrame {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        cbClient.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cbClientMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                cbClientMouseEntered(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                cbClientMousePressed(evt);
-            }
-        });
-        cbClient.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                cbClientItemStateChanged(evt);
-            }
-        });
-        cbClient.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbClientActionPerformed(evt);
-            }
-        });
-
         cbExcursion.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cbExcursionMouseClicked(evt);
@@ -236,6 +286,12 @@ public class AddOrderFrame extends javax.swing.JFrame {
             ex.printStackTrace();
         }
 
+        lastname.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lastnameActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -254,16 +310,16 @@ public class AddOrderFrame extends javax.swing.JFrame {
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
                             .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(cbClient, 0, 143, Short.MAX_VALUE)
                             .addComponent(cbExcursion, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(editId)
                             .addComponent(editAdress)
                             .addComponent(editMinut)
                             .addComponent(editSumma)
-                            .addComponent(editDate)
-                            .addComponent(editTime))))
+                            .addComponent(editDate, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
+                            .addComponent(editTime)
+                            .addComponent(lastname))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -274,10 +330,10 @@ public class AddOrderFrame extends javax.swing.JFrame {
                     .addComponent(jLabel1)
                     .addComponent(editId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
-                    .addComponent(cbClient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(lastname, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(cbExcursion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -335,7 +391,7 @@ public class AddOrderFrame extends javax.swing.JFrame {
               //  System.out.println("excursion.getDate1 "+excursion.getDate());
               //  System.out.println("excursion.getId1 "+excursion.getId());
               //  System.out.println("excursion.idtClient1 "+excursion.getClient().getId());
-                Service.addOrder(selectedItem2.toString(),selectedItem1.toString(),
+                Service.addOrder(selectedItem2.toString(),lastname.getText(),
                     editAdress.getText(), (Date) formDate.parse(editDate.getText()), timeValue,
                     Integer.valueOf(editMinut.getText()),Integer.valueOf(editSumma.getText()),  selectedItem3.toString(), Boolean.parseBoolean("False"));
               
@@ -346,36 +402,23 @@ public class AddOrderFrame extends javax.swing.JFrame {
                 //Order excursion3 = new Order(excursion2.getId(), Service.find(users.get(0).getId()),Service.find(users_.get(0).getId()),
                 //    editCity.getText(), (Date) formDate.parse(editDate.getText()),  timeValue,
                 //    Integer.valueOf(editMinut.getText()),Integer.valueOf(editSumma.getText()),  selectedItem3.toString(), Boolean.parseBoolean("False"));
-                Service.updateOrder(Long.valueOf(editId.getText()), selectedItem2.toString(),selectedItem1.toString(),
+                Service.updateOrder(Long.valueOf(editId.getText()), selectedItem2.toString(),lastname.getText(),
                     editAdress.getText(), (Date) formDate.parse(editDate.getText()),  timeValue,
                     Integer.valueOf(editMinut.getText()),Integer.valueOf(editSumma.getText()),  selectedItem3.toString(), Boolean.parseBoolean("False"));
                 this.setVisible(false);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(AddExcursionFrame.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(AddOrderFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            if (ex instanceof ParseException)
+                Logger.getLogger(AddOrderFrame.class.getName()).log(Level.SEVERE, null, ex);
+            else
+                Logger.getLogger(AddExcursionFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_buttonOkMouseClicked
-
-    private void cbClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbClientActionPerformed
-       selectedItem1 = cbClient.getSelectedItem();
-        
-    }//GEN-LAST:event_cbClientActionPerformed
 
     private void cbExcursionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbExcursionActionPerformed
        selectedItem2 = cbExcursion.getSelectedItem();
          
     }//GEN-LAST:event_cbExcursionActionPerformed
-
-    private void cbClientMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbClientMouseClicked
-        try {
-            cbClient. removeAllItems();
-            this.getCBListClient();
-        } catch (SQLException ex) {
-            Logger.getLogger(AddOrderFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_cbClientMouseClicked
 
     private void cbExcursionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbExcursionMouseClicked
         try {
@@ -386,29 +429,18 @@ public class AddOrderFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cbExcursionMouseClicked
 
-    private void cbClientMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbClientMouseEntered
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbClientMouseEntered
-
-    private void cbClientMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbClientMousePressed
-        
-    }//GEN-LAST:event_cbClientMousePressed
-
     private void cbStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStatusActionPerformed
         selectedItem3 = cbStatus.getSelectedItem();
     }//GEN-LAST:event_cbStatusActionPerformed
 
     private void cbStatusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbStatusMouseClicked
-        cbStatus.removeAllItems();
+        /*cbStatus.removeAllItems();
         for(int i=0; i < statusZ.length;i++){
             cbStatus.addItem(statusZ[i]);
         }
+        cbStatus.setSelectedIndex(0);*/
         //сbStatus.setSelectedItem(client.get(i).getLastName());
     }//GEN-LAST:event_cbStatusMouseClicked
-
-    private void cbClientItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbClientItemStateChanged
-      
-    }//GEN-LAST:event_cbClientItemStateChanged
 
     private void cbExcursionItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbExcursionItemStateChanged
         // TODO add your handling code here:
@@ -421,6 +453,10 @@ public class AddOrderFrame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void lastnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastnameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lastnameActionPerformed
 
     /**
      * @param args the command line arguments
@@ -466,7 +502,6 @@ public class AddOrderFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonOk;
-    private javax.swing.JComboBox cbClient;
     private javax.swing.JComboBox cbExcursion;
     private javax.swing.JComboBox cbStatus;
     private javax.swing.JTextField editAdress;
@@ -485,5 +520,6 @@ public class AddOrderFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField lastname;
     // End of variables declaration//GEN-END:variables
 }

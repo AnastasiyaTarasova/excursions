@@ -235,7 +235,7 @@ public class AddExcursionFrame extends javax.swing.JFrame {
                         editEmail.getText(),editLogin.getText(),  editPassword.getText());
                 this.setVisible(false);
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(AddExcursionFrame.class.getName()).log(Level.SEVERE, null, ex);
         }   
     }//GEN-LAST:event_buttonOkMouseClicked

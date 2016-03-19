@@ -7,7 +7,6 @@ package Service;
 
 import db.OrderMapper;
 import db.UserMapper;
-import java.sql.SQLException;
 import java.sql.Time;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +25,7 @@ public class Service {
    /**
      * -------------------------Методы, обрабатвающие объекты класса "USER"---------------------------
      */
-    public static User login(String login, String password) throws SQLException {
+    public static User login(String login, String password) /*throws SQLException*/ {
 	//UserMapper mapper = new UserMapper();
 	//User user = mapper.findByParam(login, password);
         User user = null;
@@ -39,7 +38,7 @@ public class Service {
     }
     
     public static User register(Integer type, String name, String lastName, String nameOfExcursion, String city, String email, String login, String password) 
-	    throws SQLException, IllegalArgumentException {
+	    throws /*SQLException,*/ IllegalArgumentException {
         
         if(name==null || name.equals("") || lastName==null || lastName.equals("") || city==null || city.equals("") ||
                 email==null || email.equals("") || login==null || login.equals("") || password==null || password.equals(""))
@@ -65,7 +64,7 @@ public class Service {
     }*/
     
     public static int addUser(int type, String name, String lastName, String nameOfExcursion, String city,
-                    String email, String login, String password) throws SQLException {
+                    String email, String login, String password) /*throws SQLException*/ {
         
         UserTransaction user = new UserTransaction();
         int count = 0;
@@ -83,7 +82,7 @@ public class Service {
         return count;
    }
     
-    public static void removeUser(Long userId) throws SQLException {
+    public static void removeUser(Long userId) /*throws SQLException*/ {
         //System.out.println("КЛЮЧ = "+ userId);
         UserTransaction.removeUser(userId);
 	JOptionPane.showMessageDialog(null, "Пользователь удалён");
@@ -98,12 +97,12 @@ public class Service {
        // JOptionPane.showMessageDialog(null, "User removed");
     }
     
-    public static void removeUserObject(User user) throws SQLException {
+    public static void removeUserObject(User user) /*throws SQLException*/ {
 	new UserMapper().delete(user);
     }
     
     public static void updateUser(Long id,int type,String name, String lastName, String nameOfExcursion, String city,
-                    String email, String login, String password) throws SQLException {
+                    String email, String login, String password) /*throws SQLException*/ {
 	/*UserMapper mapper = new UserMapper();
 	User getUser = mapper.findByParam(user.getLogin(), user.getPassword());
         //System.out.println("id выбранной записи"+getUser.getId());
@@ -125,14 +124,14 @@ public class Service {
         }   
         }
     
-    public static List<User> findNameOfExcursion(String nameOfExcursion) throws SQLException {
+    public static List<User> findNameOfExcursion(String nameOfExcursion) /*throws SQLException*/ {
         List<User> user = null;
         if (nameOfExcursion != null && !nameOfExcursion.equals(""))
             user = UserTransaction.findNameOfExcursion(nameOfExcursion);
         return user;
         }
     
-     public static List<User> findLastNameClient(String LastNameClient) throws SQLException { 
+     public static List<User> findLastNameClient(String LastNameClient) /*throws SQLException*/ { 
         List<User> user = null;
         if (LastNameClient != null && !LastNameClient.equals(""))
             user = UserTransaction.findLastNameClient(LastNameClient);
@@ -143,7 +142,7 @@ public class Service {
         return UserTransaction.find(id);
     }
      
-    public static  List<User> getAll(int type) throws SQLException {
+    public static  List<User> getAll(int type) /*throws SQLException*/ {
         List<User> user = null;
         if (type > 0) user = UserTransaction.getAll(type);
         return user;
@@ -154,7 +153,7 @@ public class Service {
      */
     
     public static int addOrder(String nameOfExcursion, String cust,
-                    String city, Date date, Time time, int duration, int cost,  String status, boolean del) throws SQLException {
+                    String city, Date date, Time time, int duration, int cost,  String status, boolean del) /*throws SQLException*/ {
     OrderTransaction excursion = new OrderTransaction();
     int count = 0;
     if(city==null || city.equals("") || date==null || date.equals("") || 
@@ -169,7 +168,7 @@ public class Service {
     }
     
     public static void updateOrder(long id, String nameOfExcursion, String cust,
-                    String city, Date date, Time time, int duration, int cost,  String status, boolean del) throws SQLException {
+                    String city, Date date, Time time, int duration, int cost,  String status, boolean del) /*throws SQLException*/ {
         if(city==null || city.equals("") || date==null || date.equals("") || 
                 time==null || time.equals("") || duration < 0 || cost < 0 )
         JOptionPane.showMessageDialog(null, "Введены не все данные, либо данные не корректны");
@@ -180,35 +179,35 @@ public class Service {
         }
     }
     
-    public static void updateOrder2(Order excursion1) throws SQLException {
+    public static void updateOrder2(Order excursion1) /*throws SQLException*/ {
         new OrderMapper().update(excursion1);
     
     }
     
-    public static void removeOrder(Long excursionId) throws SQLException {
+    public static void removeOrder(Long excursionId) /*throws SQLException*/ {
 	new OrderMapper().delete(excursionId);
         JOptionPane.showMessageDialog(null, "Заказ удалён");
     }
     
-    public static void removeOrder(Order excursion) throws SQLException {
+    public static void removeOrder(Order excursion) /*throws SQLException*/ {
 	new OrderMapper().delete(excursion);
     }
     
-    public static  List<Order> getAll(boolean bool) throws SQLException { 
+    public static  List<Order> getAll(boolean bool) /*throws SQLException*/ { 
      return new OrderMapper().getAllOrders(bool);
    }
         
-    public static  List<Order> getAll(String name) throws SQLException { 
+    public static  List<Order> getAll(String name) /*throws SQLException*/ { 
      return new OrderMapper().getAllOrders(name);
    }
     
-    public static Order findOrder(long id) throws SQLException {
+    public static Order findOrder(long id) /*throws SQLException*/ {
         Order excursion2 = null;
         excursion2 = new OrderMapper().find(id);
         return excursion2;
     }
     
-    //public static List<Order> findOrder_idPer(long id) throws SQLException {
+    //public static List<Order> findOrder_idPer(long id) /*throws SQLException*/ {
     //    return new OrderMapper().findIdGuide(id);
     //}
 

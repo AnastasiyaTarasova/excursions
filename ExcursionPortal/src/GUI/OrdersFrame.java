@@ -311,7 +311,7 @@ public class OrdersFrame extends javax.swing.JFrame {
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
         try {
             orders = (ArrayList<Order>) Service.getAll(editNameOfExcursion.getText());
-            if(!orders.isEmpty())
+            if(orders != null && !orders.isEmpty())
                 model = new OrdersTableModel(orders);
             jTable1.setModel(model);
             jTable1.setRowSelectionInterval(0, 0);

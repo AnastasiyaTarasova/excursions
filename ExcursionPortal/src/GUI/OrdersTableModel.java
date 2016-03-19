@@ -22,6 +22,11 @@ public class OrdersTableModel extends AbstractTableModel{
     ArrayList<Order> orders;
     
     public OrdersTableModel(ArrayList<Order> orders) throws SQLException {
+        if(orders == null)
+        {
+            data2 = new String[1][9];
+            return;
+        }
         this.orders = orders;
         data2 = new String[orders.size()][9];
         if (orders.size()!= 0)
@@ -41,7 +46,7 @@ public class OrdersTableModel extends AbstractTableModel{
 
     @Override
     public int getRowCount() {
-        return this.data2.length;
+        return (this.data2 == null) ? 0 : this.data2.length;
     }
 
     @Override

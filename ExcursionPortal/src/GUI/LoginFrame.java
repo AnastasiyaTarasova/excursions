@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import logic.CurrentUser;
 import logic.User;
 
 /**
@@ -142,6 +143,7 @@ public class LoginFrame extends javax.swing.JFrame {
         User user;
         try {
             user = Service.login(editUserName.getText(), editPass.getText());
+            CurrentUser.setUser(user);
             if (user != null) {
                 Excursion person = new Excursion(user);
                 person.setVisible(true);

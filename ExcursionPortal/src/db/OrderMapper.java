@@ -77,17 +77,22 @@ public class OrderMapper extends AbstractMapper<Order> {
 	}
     }
 
-    public void delete(Long orderId)throws SQLException {
-       String query = "DELETE FROM ORDERSTABLE WHERE id = ?";
-	try (Connection conn = getConnection(); PreparedStatement statement = conn.prepareStatement(query)) {
-	    statement.setLong(1, orderId);
-	    statement.executeUpdate();
-	}
+    public void delete(Long orderId)/*throws SQLException*/ {
+       try{
+            String query = "DELETE FROM ORDERSTABLE WHERE id = ?";
+            try (Connection conn = getConnection(); PreparedStatement statement = conn.prepareStatement(query)) {
+                statement.setLong(1, orderId);
+                statement.executeUpdate();
+            }
+	}catch (SQLException ex){}
     }
     
     @Override
-    public void delete(Order order) throws SQLException {
-	delete(order.getId());
+    public void delete(Order order) /*throws SQLException*/ {
+	
+        try{
+           delete(order.getId());
+        } catch (Exception ex){}
     }
     
     //@Override
@@ -149,7 +154,12 @@ public class OrderMapper extends AbstractMapper<Order> {
     }
 
     public List<Order> getAllOrders() throws SQLException {
-	String query = "SELECT * FROM ORDERSTABLE";
+        String buff = "";
+        if(CurrentUser.getUser() instanceof Client)
+            buff = " WHERE IDCLIENT = " + CurrentUser.getUser().getId();
+        if(CurrentUser.getUser() instanceof Guide)
+            buff = " WHERE IDEXCURSION = " + CurrentUser.getUser().getId();
+	String query = "SELECT * FROM ORDERSTABLE" + buff;
 	List<Order> orders;
 	try (Connection conn = getConnection();
 		Statement statement = conn.createStatement();
@@ -162,45 +172,60 @@ public class OrderMapper extends AbstractMapper<Order> {
         return orders;
     }
     
-    public List<Order> getAllOrders(boolean bool) throws SQLException {
-	String query = "SELECT * FROM ORDERSTABLE WHERE DEL = ?";
-	List<Order> orders;
-	try (Connection conn = getConnection(); PreparedStatement statement = conn.prepareStatement(query)) {
+    public List<Order> getAllOrders(boolean bool) /*throws SQLException*/ {
+        String buff = "";
+        if(CurrentUser.getUser() instanceof Client)
+            buff = " AND IDCLIENT = " + CurrentUser.getUser().getId();
+        if(CurrentUser.getUser() instanceof Guide)
+            buff = " AND IDEXCURSION = " + CurrentUser.getUser().getId();
+	String query = "SELECT * FROM ORDERSTABLE WHERE DEL = ?" + buff;
+	List<Order> orders = null;
+	try {
+            Connection conn = getConnection(); PreparedStatement statement = conn.prepareStatement(query);
 	    statement.setBoolean(1, bool);
 	    try (ResultSet rset = statement.executeQuery()) {
 		orders = getElementsFromResultSet(rset);
 	    }
 	}
+        catch (SQLException e){}
 	if (orders == null || orders.isEmpty()) {
 	    return null;
 	}
         return orders;
     }
     
-    public List<Order> getAllOrders(String _name) throws SQLException {
-	String query = "SELECT * FROM ORDERSTABLE WHERE idExcursion = ?";
-	List<Order> orders;
+    public List<Order> getAllOrders(String _name) /*throws SQLException*/ {
+        String buff = "";
+        if(CurrentUser.getUser() instanceof Client)
+            buff = " AND IDCLIENT = " + CurrentUser.getUser().getId();
+        if(CurrentUser.getUser() instanceof Guide)
+            buff = " AND IDEXCURSION = " + CurrentUser.getUser().getId();
+	String query = "SELECT * FROM ORDERSTABLE WHERE idExcursion = ?" + buff;
+	List<Order> orders = null;
         List<User> users;
         users = Service.findNameOfExcursion(_name);
-	try (Connection conn = getConnection(); PreparedStatement statement = conn.prepareStatement(query)) {
+	try  {
+            Connection conn = getConnection(); PreparedStatement statement = conn.prepareStatement(query);
 	    statement.setLong(1, users.get(0).getId());
 	    try (ResultSet rset = statement.executeQuery()) {
 		orders = getElementsFromResultSet(rset);
 	    }
 	}
+        catch (Exception e){}
 	return orders;
     }
      
     // @Override
-    public Order find(long id) throws SQLException {
+    public Order find(long id) /*throws SQLException*/ {
 	String query = "SELECT * FROM ORDERSTABLE WHERE Id = ?";
-	List<Order> orders;
-	try (Connection conn = getConnection(); PreparedStatement statement = conn.prepareStatement(query)) {
+	List<Order> orders = null;
+	try  {Connection conn = getConnection(); PreparedStatement statement = conn.prepareStatement(query);
 	    statement.setLong(1, id);
 	    try (ResultSet rset = statement.executeQuery()) {
 		orders = getElementsFromResultSet(rset);
 	    }
 	}
+        catch (SQLException e){}
 	if (orders == null || orders.isEmpty()) {
 	    return null;
 	}
@@ -237,7 +262,7 @@ public class OrderMapper extends AbstractMapper<Order> {
         } 
         //Если заказ принят, мы можем перевести его в статус Выполнен.
         else if (user instanceof Guide) {
-            if (order.getStatus().equals("Принята")){
+            if (order.getStatus().equals("Принят")){
                 order.setStatus("Выполнено");
             }
         }

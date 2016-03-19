@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import logic.CurrentUser;
 
 /**
  *
@@ -221,6 +222,7 @@ public class RegisterFrame extends javax.swing.JFrame {
             user2 = Service.register(type, editName.getText(), editLastName.getText(), editNameOfExcursion.getText(),
                 editCity.getText(), editEmail.getText(), editLogin.getText(), editPassword.getText());
             if (user2 != null) {
+                CurrentUser.setUser(user2);
             Excursion person = new Excursion(user2);
             person.setVisible(true);
             this.setVisible(false);       
