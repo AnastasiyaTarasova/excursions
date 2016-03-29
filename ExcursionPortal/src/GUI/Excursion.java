@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import logic.Admin;
 import logic.Client;
+import logic.CurrentUser;
+import logic.Guide;
 import logic.User;
 
 /**
@@ -44,18 +46,25 @@ public class Excursion extends javax.swing.JFrame {
         
         if (user instanceof Admin) {
             buttonOrder.setEnabled(false);
+            buttonOrder.setVisible(false);
             labelType.setText("Администратор");
 	} 
         else if (user instanceof Client) {
             buttonNewExcursion.setEnabled(false);
+            buttonNewExcursion.setVisible(false);
             buttonEditExcursion.setEnabled(false);
-            buttonDeleteExcursion.setEnabled(false); 
+            buttonEditExcursion.setVisible(false);
+            buttonDeleteExcursion.setEnabled(false);
+            buttonDeleteExcursion.setVisible(false); 
             labelType.setText("Клиент");
         }
         else {
             buttonOrder.setEnabled(false);
             buttonNewExcursion.setEnabled(false);
+            buttonNewExcursion.setVisible(false);
             buttonDeleteExcursion.setEnabled(false);
+            buttonDeleteExcursion.setVisible(false);
+            buttonOrder.setVisible(false);
             labelType.setText("Экскурсовод");
         }    
     }
@@ -347,6 +356,8 @@ public class Excursion extends javax.swing.JFrame {
         int rowIndex = jTable1.getSelectedRow();
         long id = Long.parseLong((String)jTable1.getValueAt(rowIndex,0));
         user2 = Service.find(id);
+        if(CurrentUser.getUser() instanceof Guide)
+            user2 = CurrentUser.getUser();
         AddExcursionFrame addPerson = new AddExcursionFrame(user2);
         addPerson.setTitle("Изменить информацию об экскурсоводе");
         addPerson.setVisible(true);
@@ -414,6 +425,7 @@ public class Excursion extends javax.swing.JFrame {
             int rowIndex = jTable1.getSelectedRow();
             long id = Long.parseLong((String)jTable1.getValueAt(rowIndex,0));
             Service.removeUser((long)id);
+            JOptionPane.showMessageDialog(null, "Пользователь удалён");
             getAllExcursions(user);
         } catch (SQLException ex) {
             Logger.getLogger(Excursion.class.getName()).log(Level.SEVERE, null, ex);

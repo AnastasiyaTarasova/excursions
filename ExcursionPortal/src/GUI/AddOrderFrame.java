@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import logic.Client;
@@ -31,7 +32,8 @@ public class AddOrderFrame extends javax.swing.JFrame {
     ArrayList<User> excursions;
     ArrayList<User> client;
     public Excursion excursion = new Excursion();
-    Order order, order2;
+    Order order;
+    Order order2;
     Object selectedItem1, selectedItem2, selectedItem3;
     List<User> users;
     List<User> users_;
@@ -77,14 +79,17 @@ public class AddOrderFrame extends javax.swing.JFrame {
         /*for(int i=0; i < statusZ.length;i++){
             cbStatus.addItem(statusZ[i]);
         }*/
-        cbStatus.addItem("На рассмотрении");
+        //cbStatus.addItem("На рассмотрении");
         cbStatus.setSelectedIndex(0);
+        cbStatus.setEditable(true);
+        ((JTextField)cbStatus.getEditor().getEditorComponent()).setDisabledTextColor(Color.black);
+        cbStatus.setEnabled(false);
     }
     
     public AddOrderFrame(Order excursion) throws SQLException {
         super("Edit Order"); 
         initComponents();
-        this.order2 = order;
+        this.order2 = excursion;
         jLabel1.setVisible(true);
         editId.setEnabled(false);
         editId.setText(Long.toString(excursion.getId()));
@@ -102,7 +107,9 @@ public class AddOrderFrame extends javax.swing.JFrame {
         editMinut.setText(Integer.toString(excursion.getMinut()));
         editSumma.setText(Integer.toString(excursion.getSum()));
         User cur = CurrentUser.getUser();
-        if(cur instanceof Guide){
+        if(cur instanceof Guide){ //выводятсяна экран значения записанные в бд и ставятся метки чтобы их нельзя трогать. 
+                                  //чтобы их изменить нужно залезть в бд с запросом на именение и тогда изменить
+                                  //изменения применяются при нажатии на кнопке
             editSumma.setDisabledTextColor(Color.BLACK);
             editSumma.setEnabled(false);
             editMinut.setDisabledTextColor(Color.BLACK);
@@ -113,9 +120,7 @@ public class AddOrderFrame extends javax.swing.JFrame {
             editDate.setEnabled(false);
             editAdress.setDisabledTextColor(Color.BLACK);
             editAdress.setEnabled(false);
-            
-            
-            
+                        
             /*cbExcursion.setBackground(Color.WHITE);
             ((JTextField) cbExcursion.getEditor().getEditorComponent()).setDisabledTextColor(Color.BLACK);
             JComboBox cmb = new JComboBox("first", "second");
@@ -131,25 +136,35 @@ public class AddOrderFrame extends javax.swing.JFrame {
             
             
             cbStatus.removeAllItems();
-            if(excursion.getStatus().equals("На рассмотрении")){
+            /*if(excursion.getStatus().equals("На рассмотрении")){
                 cbStatus.addItem("Одобрена");
                 cbStatus.addItem("Отказано");
+            
             }
             else if(excursion.getStatus().equals("Одобрена")){
                 cbStatus.addItem("Проведена");
             }
             else{
                 cbStatus.addItem("Одобрена");
-                /*cbStatus.addItem("Отказано");
-                cbStatus.addItem("Проведена");*/
-            }
+                //cbStatus.addItem("Отказано");
+                //cbStatus.addItem("Проведена");
+            }*/
+            String[] buff = new String[2];
+            buff = order2.GetAvailableStatus(/*excursion.getStatus()*/);
+            cbStatus.addItem(buff[0]);
+            if(buff[1] != null)
+                cbStatus.addItem(buff[1]);
             /*cbStatus.addItem("Одобрена");
             cbStatus.addItem("Проведена");
             cbStatus.addItem("Отказано");*/
+            //getEvaluabeStatus - вернуть статусы, в которые возможнен переход в данный момент времени и спрятать это не в gui
         }
         if(cur instanceof Client){
             cbStatus.removeAllItems();
-            cbStatus.addItem("На рассмотрении");
+            cbStatus.addItem(order2.GetAvailableStatus(/*excursion.getStatus()*/)[0]);
+            cbStatus.setEditable(true);
+            ((JTextField)cbStatus.getEditor().getEditorComponent()).setDisabledTextColor(Color.black);
+            cbStatus.setEnabled(false);
         }
         buttonOk.setText("Save");
 
@@ -391,10 +406,23 @@ public class AddOrderFrame extends javax.swing.JFrame {
               //  System.out.println("excursion.getDate1 "+excursion.getDate());
               //  System.out.println("excursion.getId1 "+excursion.getId());
               //  System.out.println("excursion.idtClient1 "+excursion.getClient().getId());
-                Service.addOrder(selectedItem2.toString(),lastname.getText(),
+                int addOrderResult = Service.addOrder(selectedItem2.toString(),lastname.getText(),
                     editAdress.getText(), (Date) formDate.parse(editDate.getText()), timeValue,
                     Integer.valueOf(editMinut.getText()),Integer.valueOf(editSumma.getText()),  selectedItem3.toString(), Boolean.parseBoolean("False"));
+                if (addOrderResult == 0)
+                {
+                    JOptionPane.showMessageDialog(null, "Введены не все данные, либо данные не корректны"); 
+                }
+                else if (addOrderResult == -3)
+                {
+                    JOptionPane.showMessageDialog(null, "Экскурсовод занят, попробуйте выбрать другое время");
+                }
+                else if (addOrderResult != -3)
+                {
+                    JOptionPane.showMessageDialog(null, "Заказ успешно добавлен");
+                }
               
+                
                 this.setVisible(false);
             }
             else {
@@ -402,10 +430,34 @@ public class AddOrderFrame extends javax.swing.JFrame {
                 //Order excursion3 = new Order(excursion2.getId(), Service.find(users.get(0).getId()),Service.find(users_.get(0).getId()),
                 //    editCity.getText(), (Date) formDate.parse(editDate.getText()),  timeValue,
                 //    Integer.valueOf(editMinut.getText()),Integer.valueOf(editSumma.getText()),  selectedItem3.toString(), Boolean.parseBoolean("False"));
-                Service.updateOrder(Long.valueOf(editId.getText()), selectedItem2.toString(),lastname.getText(),
+                int updateOrderResult = 0;
+                if(CurrentUser.getUser() instanceof Guide)
+                    updateOrderResult = Service.updateOrder(order2.getId(), order2.getExcursion().getNameOfExcursion(),order2.getExcursion().getLastName(),
+                    order2.getAddress(), (Date) formDate.parse(editDate.getText()),  timeValue,
+                    Integer.valueOf(editMinut.getText()),Integer.valueOf(editSumma.getText()),  selectedItem3.toString(), Boolean.parseBoolean("False"));
+                else
+                updateOrderResult = Service.updateOrder(Long.valueOf(editId.getText()), selectedItem2.toString(),lastname.getText(),
                     editAdress.getText(), (Date) formDate.parse(editDate.getText()),  timeValue,
                     Integer.valueOf(editMinut.getText()),Integer.valueOf(editSumma.getText()),  selectedItem3.toString(), Boolean.parseBoolean("False"));
+                
+//                updateOrderResult = Service.updateOrder(Long.valueOf(editId.getText()), selectedItem2.toString(),lastname.getText(),
+//                    editAdress.getText(), (Date) formDate.parse(editDate.getText()),  timeValue,
+//                    Integer.valueOf(editMinut.getText()),Integer.valueOf(editSumma.getText()),  selectedItem3.toString(), Boolean.parseBoolean("False"));
+                
                 this.setVisible(false);
+                
+                if (updateOrderResult == 0)
+                {
+                    JOptionPane.showMessageDialog(null, "Введены не все данные, либо данные не корректны");
+                }
+                else if (updateOrderResult == -3)
+                {
+                    JOptionPane.showMessageDialog(null, "Экскурсовод занят, попробуйте выбрать другое время");
+                }
+                else if (updateOrderResult == -2)
+                {
+                    JOptionPane.showMessageDialog(null, "Информация обновлена");
+                }
             }
         } catch (Exception ex) {
             if (ex instanceof ParseException)

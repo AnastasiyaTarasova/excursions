@@ -221,6 +221,10 @@ public class RegisterFrame extends javax.swing.JFrame {
             type = cbType.getSelectedIndex();
             user2 = Service.register(type, editName.getText(), editLastName.getText(), editNameOfExcursion.getText(),
                 editCity.getText(), editEmail.getText(), editLogin.getText(), editPassword.getText());
+            if (user2 == null)
+            {
+               JOptionPane.showMessageDialog(null, "Введены не все данные"); 
+            }
             if (user2 != null) {
                 CurrentUser.setUser(user2);
             Excursion person = new Excursion(user2);

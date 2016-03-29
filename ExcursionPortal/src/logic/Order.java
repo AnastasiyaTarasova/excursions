@@ -55,7 +55,7 @@ public class Order {
     this.del = del;
     
     }
-
+    
     public void setId(int id)                           {this.id = id;}
     public long getId()                                 {return id;}
     public User getExcursion()                          {return Excursion;}
@@ -77,5 +77,27 @@ public class Order {
     public void setDel(boolean del)                     {this.del = del;}
     public boolean getDel()                              {return del;}
 
+    
+    public String[] GetAvailableStatus(/*String str*/){
+        String []result = new String[2];
+        if(CurrentUser.getUser() instanceof Client){
+            result[0] = "На рассмотрении";
+            return result;
+        }
+        switch (status)
+        {
+            case "На рассмотрении":
+                result[0] = "Одобрена"; 
+                result[1]="Отказано";
+                break;
+            case "Одобрена":
+                result[0] = "Проведена";
+                break;
+            default:
+                result[0] = "Одобрена";
+                
+        }
+         return result;  
+    }
 }
 

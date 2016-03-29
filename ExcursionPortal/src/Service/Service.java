@@ -10,7 +10,6 @@ import db.UserMapper;
 import java.sql.Time;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JOptionPane;
 import logic.Order;
 import logic.OrderTransaction;
 import logic.User;
@@ -43,7 +42,6 @@ public class Service {
         if(name==null || name.equals("") || lastName==null || lastName.equals("") || city==null || city.equals("") ||
                 email==null || email.equals("") || login==null || login.equals("") || password==null || password.equals(""))
         {
-            JOptionPane.showMessageDialog(null, "Введены не все данные");
             return null;
         }
         else 
@@ -72,12 +70,16 @@ public class Service {
                 nameOfExcursion==null || nameOfExcursion.equals("") || city==null || city.equals("") ||
                 email==null || email.equals("") || login==null || login.equals("") || password==null || password.equals(""))
         {
-            JOptionPane.showMessageDialog(null, "Введены не все данные");//
-            //return 0;
+            //Shower.Show( "Введены не все данные");//
+            return 0;
         }
         else {
             count = user.addUser(type, name, lastName, nameOfExcursion, city, email, login, password);
-            if (count == 1) JOptionPane.showMessageDialog(null, "Пользователь с таким именем существует");
+            /*if (count == 1) //Shower.Show( "Пользователь с таким именем существует");
+            {
+                return -1;
+            }*/
+            
         }
         return count;
    }
@@ -85,7 +87,7 @@ public class Service {
     public static void removeUser(Long userId) /*throws SQLException*/ {
         //System.out.println("КЛЮЧ = "+ userId);
         UserTransaction.removeUser(userId);
-	JOptionPane.showMessageDialog(null, "Пользователь удалён");
+	//Shower.Show( "Пользователь удалён");
         //List<Order> excursions = null;
         //excursions = findOrder_idPer(userId);
         //for(int i=0;i<excursions.size();i++){
@@ -94,34 +96,35 @@ public class Service {
         //}
         
        // new UserMapper().delete(userId);
-       // JOptionPane.showMessageDialog(null, "User removed");
+       // Shower.Show( "User removed");
     }
     
     public static void removeUserObject(User user) /*throws SQLException*/ {
 	new UserMapper().delete(user);
     }
     
-    public static void updateUser(Long id,int type,String name, String lastName, String nameOfExcursion, String city,
+    public static int updateUser(Long id,int type,String name, String lastName, String nameOfExcursion, String city,
                     String email, String login, String password) /*throws SQLException*/ {
 	/*UserMapper mapper = new UserMapper();
 	User getUser = mapper.findByParam(user.getLogin(), user.getPassword());
         //System.out.println("id выбранной записи"+getUser.getId());
 	if (getUser.getId() != user.getId()) {
-	    JOptionPane.showMessageDialog(null, "User exist");
+	    Shower.Show( "User exist");
 	}
         else {
             new UserMapper().update(user);
-            JOptionPane.showMessageDialog(null, "Record updated");
+            Shower.Show( "Record updated");
         }*/
         if(name==null || name.equals("") || lastName==null || lastName.equals("") || 
                 nameOfExcursion==null || nameOfExcursion.equals("") || city==null || city.equals("") ||
                 email==null || email.equals("") || login==null || login.equals("") || password==null || password.equals(""))
-            JOptionPane.showMessageDialog(null, "Введены не все данные");
+           return 0;
         else { 
             int count = UserTransaction.updateUser(id, type, name, lastName, nameOfExcursion, city, email, login, password);
-            if (count == 1) JOptionPane.showMessageDialog(null, "Пользователь существует");//Пользователь существует
-            if (count == -2) JOptionPane.showMessageDialog(null, "Информация обновлена");//
+            if (count == 1) return 1;//Пользователь существует
+            if (count == -2) return -2;//Shower.Show( "Информация обновлена");//
         }   
+        return -3;
         }
     
     public static List<User> findNameOfExcursion(String nameOfExcursion) /*throws SQLException*/ {
@@ -158,25 +161,28 @@ public class Service {
     int count = 0;
     if(city==null || city.equals("") || date==null || date.equals("") || 
                 time==null || time.equals("") || duration < 0 || cost < 0 )
-        JOptionPane.showMessageDialog(null, "Введены не все данные, либо данные не корректны");
+        //Shower.Show( "Введены не все данные, либо данные не корректны");
+        return 0;
     else { 
         count = excursion.addOrder(nameOfExcursion,cust, city, date, time, duration, cost,  status, del);
-        if (count == -3) JOptionPane.showMessageDialog(null, "Экскурсовод занят, попробуйте выбрать другое время");
-        if (count != -3) JOptionPane.showMessageDialog(null, "Заказ успешно добавлен");
+        /*if (count == -3) Shower.Show( "Экскурсовод занят, попробуйте выбрать другое время");
+        if (count != -3) Shower.Show( "Заказ успешно добавлен");*/
     }
     return count;
     }
     
-    public static void updateOrder(long id, String nameOfExcursion, String cust,
+    public static int updateOrder(long id, String nameOfExcursion, String cust,
                     String city, Date date, Time time, int duration, int cost,  String status, boolean del) /*throws SQLException*/ {
+        int count = 0;
         if(city==null || city.equals("") || date==null || date.equals("") || 
                 time==null || time.equals("") || duration < 0 || cost < 0 )
-        JOptionPane.showMessageDialog(null, "Введены не все данные, либо данные не корректны");
+        count = 0;
     else {
-        int count = OrderTransaction.updateOrder(id, nameOfExcursion,cust, city, date, time, duration, cost,  status, del);
-        if (count == -3) JOptionPane.showMessageDialog(null, "Экскурсовод занят, попробуйте выбрать другое время");
-        if (count == -2) JOptionPane.showMessageDialog(null, "Информация обновлена");
+        count = OrderTransaction.updateOrder(id, nameOfExcursion,cust, city, date, time, duration, cost,  status, del);
+//        if (count == -3) Shower.Show( "Экскурсовод занят, попробуйте выбрать другое время");
+//        if (count == -2) Shower.Show( "Информация обновлена");
         }
+        return count;
     }
     
     public static void updateOrder2(Order excursion1) /*throws SQLException*/ {
@@ -184,9 +190,10 @@ public class Service {
     
     }
     
-    public static void removeOrder(Long excursionId) /*throws SQLException*/ {
+    public static int removeOrder(Long excursionId) /*throws SQLException*/ {
 	new OrderMapper().delete(excursionId);
-        JOptionPane.showMessageDialog(null, "Заказ удалён");
+        return 0;
+        //Shower.Show( "Заказ удалён");
     }
     
     public static void removeOrder(Order excursion) /*throws SQLException*/ {

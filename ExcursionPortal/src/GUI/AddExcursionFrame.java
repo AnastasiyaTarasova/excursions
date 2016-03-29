@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import logic.Guide; 
 import logic.User;
 /**
@@ -220,9 +221,17 @@ public class AddExcursionFrame extends javax.swing.JFrame {
                     editLastName.getText(), editNameOfExcursion.getText(),  editCity.getText(),
                     editEmail.getText(),editLogin.getText(),  editPassword.getText());*/
                 //User.addUser(person);
-                Service.addUser(2,editName.getText(), editLastName.getText(), editNameOfExcursion.getText(),  
+                int addUserStatus = Service.addUser(2,editName.getText(), editLastName.getText(), editNameOfExcursion.getText(),  
                         editCity.getText(), editEmail.getText(),editLogin.getText(),  
                         editPassword.getText());
+                if (addUserStatus == 0)
+                {
+                    JOptionPane.showMessageDialog(null, "Введены не все данные");
+                }
+                else if (addUserStatus == 1)
+                {
+                    JOptionPane.showMessageDialog(null, "Пользователь с таким именем существует");
+                }
                 this.setVisible(false);
             }
             else {
@@ -230,9 +239,22 @@ public class AddExcursionFrame extends javax.swing.JFrame {
                 /*User person2 = new Excursion(Long.valueOf(editId.getText()),2,editName.getText(),
                         editLastName.getText(), editNameOfExcursion.getText(),  editCity.getText(),
                         editEmail.getText(),editLogin.getText(),  editPassword.getText());*/
-                Service.updateUser(Long.valueOf(editId.getText()),2,editName.getText(),
+                int updateUserResult = Service.updateUser(Long.valueOf(editId.getText()),2,editName.getText(),
                         editLastName.getText(), editNameOfExcursion.getText(), editCity.getText(),
                         editEmail.getText(),editLogin.getText(),  editPassword.getText());
+                if (updateUserResult == 0)
+                {
+                    JOptionPane.showMessageDialog(null, "Введены не все данные"); 
+                }
+                else if (updateUserResult == 1)
+                {
+                    JOptionPane.showMessageDialog(null, "Пользователь существует"); 
+                }
+                else if (updateUserResult == -2)
+                {
+                    JOptionPane.showMessageDialog(null, "Информация обновлена"); 
+                }
+                
                 this.setVisible(false);
             }
         } catch (Exception ex) {

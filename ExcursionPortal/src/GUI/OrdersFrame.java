@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import logic.Admin;
 import logic.Client;
 import logic.Order;
@@ -324,7 +325,9 @@ public class OrdersFrame extends javax.swing.JFrame {
         try {
             int rowIndex = jTable1.getSelectedRow();
             long id = Long.parseLong((String)jTable1.getValueAt(rowIndex,0));
-            Service.removeOrder((long)id);
+            int removeOrderResult = Service.removeOrder((long)id);
+            if (removeOrderResult == 0)
+                JOptionPane.showMessageDialog(null, "Заказ удалён");
             getAllOrders(Boolean.parseBoolean("False"));
         } catch (SQLException ex) {
             Logger.getLogger(Excursion.class.getName()).log(Level.SEVERE, null, ex);
