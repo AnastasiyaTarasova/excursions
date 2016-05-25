@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact type="war" build-on-make="true" name="web">
+    <output-path>$PROJECT_DIR$/out/artifacts/web</output-path>
+    <root id="archive" name="web.war">
+      <element id="directory" name="WEB-INF">
+        <element id="dir-copy" path="$PROJECT_DIR$/Web/web/WEB-INF" />
+        <element id="directory" name="classes">
+          <element id="module-output" name="Web" />
+        </element>
+        <element id="directory" name="views">
+          <element id="dir-copy" path="$PROJECT_DIR$/Web/web/WEB-INF/views" />
+        </element>
+      </element>
+      <element id="file-copy" path="$PROJECT_DIR$/Web/web/index.jsp" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/Web/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="directory" name="js">
+        <element id="dir-copy" path="$PROJECT_DIR$/Web/web/js" />
+      </element>
+    </root>
+  </artifact>
+</component>
